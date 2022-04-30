@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "CMake Build",
+			"type": "cmake",
+			"command": "build",
+			"group": "build"
+		},
+		{
+			"label": "Run",
+			"type": "shell",
+			"command": "./textures",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			}
+		},
+		{
+			"label": "Build and Run",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"CMake Build",
+				"Run"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		}
+	]
+}
