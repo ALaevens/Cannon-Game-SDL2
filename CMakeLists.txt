@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(textures VERSION 0.1.0)
+project(cannon VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 
 include(CTest)
@@ -15,7 +15,9 @@ find_package(SDL2_mixer REQUIRED)
 set(LOCAL_INCLUDE_DIR include)
 include_directories(${LOCAL_INCLUDE_DIR})
 
-add_executable(${PROJECT_NAME} src/main.cpp src/Window.cpp src/util.cpp src/Clock.cpp src/TextureManager.cpp)
+
+add_executable(${PROJECT_NAME} src/main.cpp src/Engine/Window.cpp src/Engine/util.cpp src/Engine/Clock.cpp src/Engine/TextureManager.cpp)
+target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/third_party")
 
 target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image SDL2::GFX SDL2::Mixer)
 

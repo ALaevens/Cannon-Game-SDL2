@@ -10,7 +10,7 @@
 		{
 			"label": "Run",
 			"type": "shell",
-			"command": "./textures",
+			"command": "./cannon",
 			"options": {
 				"cwd": "${workspaceFolder}/build"
 			}

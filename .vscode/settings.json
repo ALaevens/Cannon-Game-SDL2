@@ -57,6 +57,9 @@
         "ctime": "cpp",
         "ratio": "cpp",
         "iomanip": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "bitset": "cpp",
+        "list": "cpp",
+        "unordered_set": "cpp"
     },
 }

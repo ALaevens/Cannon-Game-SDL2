@@ -1,4 +1,4 @@
-#include "TextureManager.hpp"
+#include "Engine/TextureManager.hpp"
 
 namespace fs = std::filesystem;
 
@@ -41,15 +41,14 @@ SDL_Texture* TextureManager::fetch(std::string path_segment) {
 
         fs::directory_entry full_path = fs::directory_entry(root_dir / relative_path);
         
+        // load and store file (if it exists)
         if (full_path.is_regular_file()) {
             std::cout << "LOAD: " << full_path << std::endl;
             tex = this->load_from_file(full_path.path());
             loaded_textures[relative_path] = tex;
         }
 
-
     } else {
-        std::cout << "Texture " << relative_path << " found in cache\n";
         tex = tex_pair->second;
     }
     
