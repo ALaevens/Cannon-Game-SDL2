@@ -6,15 +6,16 @@
 
 class Clock {
 public:
-    Clock(Uint64 p_minDuration);
+    Clock(double p_minDuration);
     Clock();
-    Uint64 tick();
+    double tick();
 
 private:
     Uint64 last;
     Uint64 current;
-    Uint64 duration;
-    Uint64 minDuration;
+    Uint64 tps;
+    double duration;
+    double minDuration;
 };
 
 

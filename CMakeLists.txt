@@ -16,8 +16,8 @@ set(LOCAL_INCLUDE_DIR include)
 include_directories(${LOCAL_INCLUDE_DIR})
 
 
-add_executable(${PROJECT_NAME} src/main.cpp src/Engine/Window.cpp src/Engine/util.cpp src/Engine/Clock.cpp src/Engine/TextureManager.cpp)
-target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/third_party")
+add_executable(${PROJECT_NAME} src/main.cpp src/game.cpp src/Engine/ECS.cpp src/Engine/Window.cpp src/Engine/util.cpp src/Engine/Clock.cpp src/Engine/TextureManager.cpp src/Engine/SFXManager.cpp)
+# target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/third_party")
 
 target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image SDL2::GFX SDL2::Mixer)
 

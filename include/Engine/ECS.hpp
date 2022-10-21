@@ -49,43 +49,32 @@ namespace ECS
         Entity* entity;
 
         virtual void init() {}
-        virtual void update(float ms) {}
+        virtual void update(double ms) {}
         virtual void draw(SDL_Renderer* renderer) {}
         virtual ~Component() {}
     };
 
     class Entity {
     public:
-        Entity(Manager& p_manager) : manager(p_manager) {}
+        Entity(Manager& p_manager);
 
-        void update(float ms) {
-            for (auto& c : components) {
-                c->update(ms);
-            }
-        }
+        void update(double ms);
 
-        void draw(SDL_Renderer* renderer) {
-            for (auto& c : components) {
-                c->draw(renderer);
-            }
-        }
+        void draw(SDL_Renderer* renderer);
 
-        bool isAlive() { return alive; }
-        void destroy() { alive = false; }
+        bool isAlive();
+        void destroy();
 
         template <typename T>
         bool hasComponent() const {
             return componentBitset[getComponentTypeID<T>()];
         }
 
-        bool hasGroup(Group p_group) const noexcept {
-            return groupBitset[p_group];
-        }
+        bool hasGroup(Group p_group) const noexcept;
 
         void addGroup(Group p_group) noexcept;
-        void delGroup(Group p_group) noexcept {
-            groupBitset[p_group] = false;
-        }
+
+        void delGroup(Group p_group) noexcept;
 
         template <typename T, typename... TArgs>
         T& addComponent(TArgs&&... p_Args) {
@@ -122,76 +111,24 @@ namespace ECS
 
     class Manager {
     public:
-        void update(float ms) {
-            for (auto& e : entities) {
-                e->update(ms);
-            }
-        }
+        void update(double ms);
         
-        void draw(SDL_Renderer* renderer) {
-            for (auto& e : entities) {
-                e->draw(renderer);
-            }
-        }
+        void draw(SDL_Renderer* renderer);
 
-        void draw(SDL_Renderer* renderer, std::vector<Entity*>& p_entities) {
-            for (auto& e : p_entities) {
-                e->draw(renderer);
-            }
-        }
+        void draw(SDL_Renderer* renderer, std::vector<Entity*>& p_entities);
 
-        void addToGroup(Entity* p_entity, Group p_group) {
-            groupedEntities[p_group].emplace_back(p_entity);
-        }
+        void addToGroup(Entity* p_entity, Group p_group);
 
-        std::vector<Entity*>& getEntitiesByGroup(Group p_group) {
-            return groupedEntities[p_group];
-        }
+        std::vector<Entity*>& getEntitiesByGroup(Group p_group);
 
-        void refresh() {
-            for (int i = 0; i < maxGroups; ++i) {
-                auto& v = groupedEntities[i];
-                v.erase(
-                    std::remove_if(
-                        std::begin(v), 
-                        std::end(v), 
-                        [i](Entity* p_entity) {
-                            return !p_entity->isAlive() || !p_entity->hasGroup(i);
-                        }
-                    ),
-                    std::end(v)
-                );
-            }
-            
-            entities.erase(
-                std::remove_if(
-                    std::begin(entities), 
-                    std::end(entities),
-                    [](const std::unique_ptr<Entity>& p_entity) {
-                        return !p_entity->isAlive();
-                    }
-                ),
-                std::end(entities)
-            );
-        }
+        void refresh();
 
-        Entity& addEntity() {
-            Entity* e = new Entity(*this);
-            std::unique_ptr<Entity> uPtr{e};
-            entities.emplace_back(std::move(uPtr));
-            return *e;
-        }
+        Entity& addEntity();
 
     private:
         std::vector<std::unique_ptr<Entity>> entities;
         std::array<std::vector<Entity*>, maxGroups> groupedEntities;
     };
-
-    void Entity::addGroup(Group p_group) noexcept {
-        groupBitset[p_group] = true;
-        manager.addToGroup(this, p_group);
-    }
-
 } // namespace ECS
 
 

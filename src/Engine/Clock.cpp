@@ -1,23 +1,29 @@
 #include "Engine/Clock.hpp"
 #include <iostream>
 
-Clock::Clock() : Clock(0u) {}
+Clock::Clock() : Clock(-1.0) {}
 
-Clock::Clock(Uint64 p_minDuration) : minDuration(p_minDuration) {
+Clock::Clock(double p_minDuration) : minDuration(p_minDuration) {
+    tps = SDL_GetPerformanceFrequency();
+    std::cout << "Clock using a resolution of " << tps << " ticks / sec\n";
     current = SDL_GetTicks();
     last = current;
 }
 
-Uint64 Clock::tick() {
+double Clock::tick() {
     last = current;
-    current = SDL_GetTicks64();
-    Uint64 duration = (current - last);
+
+    double now = SDL_GetPerformanceCounter();
+    double duration = (double)((now - last)*1000) / tps;
 
     if (duration < minDuration && minDuration > 0) {
-        Uint64 diff = minDuration - duration;
+        int diff = ceil(minDuration - duration);
         SDL_Delay(diff);
-        duration += diff;
+
+        double now = SDL_GetPerformanceCounter();
+        double duration = (double)((now - last)*1000) / tps; 
     }
 
+    current = now;
     return duration;
 }

@@ -17,7 +17,7 @@ public:
     SDL_Renderer* getRenderer() { return renderer; }
 
     void update() { SDL_RenderPresent(renderer); }
-    void set_title(char* title) { SDL_SetWindowTitle(window, title); }
+    void set_title(const char* title) { SDL_SetWindowTitle(window, title); }
 
 private:
     int w, h;

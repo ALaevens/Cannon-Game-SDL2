@@ -20,8 +20,8 @@ struct CKinematics : Component {
         cPos = &entity->getComponent<CPosition>();
     }
 
-    void update(float ms) override {
-        float sec = ms / 1000.0f;
+    void update(double ms) override {
+        double sec = ms / 1000.0;
         Vector2<float> v_f = (a*sec) + v;
         Vector2<float> d = (v*sec) + (a*0.5*pow(sec, 2));
 

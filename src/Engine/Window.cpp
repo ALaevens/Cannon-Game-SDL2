@@ -12,7 +12,7 @@ Window::Window(const char *title, int w, int h) {
         return;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == nullptr) {
         show_sdl_error("Renderer not created");
         return;
