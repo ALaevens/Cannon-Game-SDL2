@@ -2,7 +2,7 @@
 #include "../Engine/ECS.hpp"
 #include "Components/CPosition.hpp"
 #include "Components/CDestRect.hpp"
-
+#include "Components/CRotation.hpp"
 using namespace ECS;
 
 struct CStaticTexture : Component {
@@ -10,6 +10,7 @@ struct CStaticTexture : Component {
     SDL_Rect srcRect;
     CPosition* cPos = nullptr;
     CDestRect* cDest = nullptr;
+    CRotation* cRot = nullptr;
 
     float scale;
 
@@ -18,6 +19,9 @@ struct CStaticTexture : Component {
     void init() override {
         cPos = &entity->getComponent<CPosition>();
         cDest = &entity->getComponent<CDestRect>();
+
+        if (entity->hasComponent<CRotation>())
+            cRot = &entity->getComponent<CRotation>();
 
         int w, h;
         SDL_QueryTexture(tex, nullptr, nullptr, &w, &h);
@@ -33,6 +37,9 @@ struct CStaticTexture : Component {
     }
 
     void draw(SDL_Renderer* renderer) override {
-        SDL_RenderCopy(renderer, tex, &srcRect, &cDest->rect);
+        if (cRot)
+            SDL_RenderCopyEx(renderer, tex, &srcRect, &cDest->rect, cRot->degrees, cRot->point(), SDL_FLIP_NONE);
+        else
+            SDL_RenderCopy(renderer, tex, &srcRect, &cDest->rect);
     }
 };

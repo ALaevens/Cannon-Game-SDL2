@@ -4,6 +4,7 @@
 #include "Vector2.hpp"
 #include "Components/CPosition.hpp"
 #include <cmath>
+#include <iostream>
 
 using namespace ECS;
 
@@ -24,6 +25,8 @@ struct CKinematics : Component {
         double sec = ms / 1000.0;
         Vector2<float> v_f = (a*sec) + v;
         Vector2<float> d = (v*sec) + (a*0.5*pow(sec, 2));
+
+        // std::cout << "vi: " << v.y << ", vf: " << v_f.y << std::endl;
 
         v = v_f;
         cPos->pos = cPos->pos + d;

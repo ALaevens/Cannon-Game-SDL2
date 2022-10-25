@@ -11,15 +11,16 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_gfx REQUIRED)
 find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 set(LOCAL_INCLUDE_DIR include)
 include_directories(${LOCAL_INCLUDE_DIR})
 
 
-add_executable(${PROJECT_NAME} src/main.cpp src/game.cpp src/Engine/ECS.cpp src/Engine/Window.cpp src/Engine/util.cpp src/Engine/Clock.cpp src/Engine/TextureManager.cpp src/Engine/SFXManager.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/game.cpp src/Engine/ECS.cpp src/Engine/Window.cpp src/Engine/util.cpp src/Engine/Clock.cpp src/Engine/TextureManager.cpp src/Engine/SFXManager.cpp src/Engine/FontManager.cpp)
 # target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/third_party")
 
-target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image SDL2::GFX SDL2::Mixer)
+target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image SDL2::GFX SDL2::Mixer SDL2::TTF)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

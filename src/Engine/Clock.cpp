@@ -1,12 +1,17 @@
 #include "Engine/Clock.hpp"
+#include "Engine/util.hpp"
 #include <iostream>
 
 Clock::Clock() : Clock(-1.0) {}
 
 Clock::Clock(double p_minDuration) : minDuration(p_minDuration) {
     tps = SDL_GetPerformanceFrequency();
-    std::cout << "Clock using a resolution of " << tps << " ticks / sec\n";
-    current = SDL_GetTicks();
+
+    std::stringstream ss;
+    ss << "Clock using a resolution of " << tps << " ticks / sec\n";
+    log_out(ss);
+    
+    current = SDL_GetPerformanceCounter();
     last = current;
 }
 

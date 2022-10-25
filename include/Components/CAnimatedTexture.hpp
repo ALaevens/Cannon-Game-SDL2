@@ -47,8 +47,7 @@ struct CAnimatedTexture : Component {
                 
                 if (currentFrame == 0)
                     plays--;
-
-                // std::cout << "FRAME: " << currentFrame << std::endl;
+                    
                 srcRect.x = currentFrame*srcRect.w;
 
                 timer = 0.0;

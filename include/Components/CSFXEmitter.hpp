@@ -1,14 +1,17 @@
 #pragma once
 #include "../Engine/ECS.hpp"
+#include <vector>
 
 using namespace ECS;
 
 struct CSFXEmitter : Component {
-    Mix_Chunk* chunk;
+    std::vector<Mix_Chunk*> sounds;
+    CSFXEmitter(std::vector<Mix_Chunk*> p_sounds) : sounds(p_sounds) {}
 
-    CSFXEmitter(Mix_Chunk* p_chunk) : chunk(p_chunk) {}
+    // Mix_Chunk* &sounds;
+    // CSFXEmitter(Mix_Chunk* &p_sounds) : sounds(p_sounds) {};
 
-    void play() {
-        Mix_PlayChannel(-1, chunk, 0);
+    void play(int soundID) {
+        Mix_PlayChannel(-1, sounds.at(soundID), 0);
     }
 };

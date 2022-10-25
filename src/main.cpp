@@ -5,25 +5,19 @@
 #include <set>
 #include <string>
 
-Mix_Chunk* load_sfx(const char *path) {
-    Mix_Chunk* sfx = nullptr;
-    sfx = Mix_LoadWAV(path);
-    
-    if (sfx == nullptr) {
-        show_sdl_error("Sound effect could not be loaded");
-    }
-
-    return sfx;
-}
-
 
 int main(int argc, char **argv) {
-    std::cout << "Path: " << argv[0] << std::endl;
+    // log_out << "Path: " << argv[0] << "\n";
+
+    if (!init()) {
+        return -1;
+    }
 
     Game* game = new Game();
     game->run();
     delete game;
 
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 

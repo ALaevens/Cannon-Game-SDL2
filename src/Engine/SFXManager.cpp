@@ -5,25 +5,20 @@ namespace fs = std::filesystem;
 SFXManager::SFXManager(std::string root_dir_string) {
     root_dir = root_dir_string;
     root_dir.make_preferred();
-    std::cout << "Sound Root: " << root_dir.string() << std::endl; 
+    std::stringstream ss;
+    ss << "Sound Root: " << root_dir.string() << std::endl;
+    log_out(ss);
 }
 
 SFXManager::~SFXManager() {
     for (const auto& n : loaded_effects) {
         Mix_FreeChunk(loaded_effects[n.first]);
     }
-}
 
-// void TextureManager::prefetch_directory(std::string file_extension) {
-//     // recurse in root directory
-//     for (const fs::directory_entry& dir_entry : fs::recursive_directory_iterator(root_dir)) {
-        
-//         // add any files with the matching extension to the cache
-//         if (dir_entry.is_regular_file() && dir_entry.path().extension() == file_extension) {
-//             this->fetch(dir_entry.path().string().substr(root_dir.string().length() + 1));
-//         }
-//     }
-// }
+    for (const auto& n : loaded_songs) {
+        Mix_FreeMusic(loaded_songs[n.first]);
+    }
+}
 
 void SFXManager::prefetch_directory(std::string file_extension) {
     // recurse in root directory
@@ -36,34 +31,6 @@ void SFXManager::prefetch_directory(std::string file_extension) {
     }
 }
 
-// SDL_Texture* TextureManager::fetch(std::string path_segment) {
-//     fs::path relative_path = {path_segment};
-//     relative_path.make_preferred();
-
-//     SDL_Texture* tex = nullptr;
-
-//     auto tex_pair = loaded_textures.find(relative_path);
-
-//     // texture not cached
-//     if (tex_pair == loaded_textures.end()) {
-//         std::cout << "Texture " << relative_path << " not found in cache. Loading...\n";
-
-//         fs::directory_entry full_path = fs::directory_entry(root_dir / relative_path);
-        
-//         // load and store file (if it exists)
-//         if (full_path.is_regular_file()) {
-//             std::cout << "LOAD: " << full_path << std::endl;
-//             tex = this->load_from_file(full_path.path());
-//             loaded_textures[relative_path] = tex;
-//         }
-
-//     } else {
-//         tex = tex_pair->second;
-//     }
-    
-//     return tex;
-// }
-
 Mix_Chunk* SFXManager::fetch_sfx(std::string path_segment) {
     fs::path relative_path = {path_segment};
     relative_path.make_preferred();    
@@ -73,14 +40,19 @@ Mix_Chunk* SFXManager::fetch_sfx(std::string path_segment) {
 
     // sfx not cached
     if (sfx_pair == loaded_effects.end()) {
-        std::cout << "SFX " << relative_path << " not found in cache. Loading...\n";
+        std::stringstream ss;
+        ss << "SFX " << relative_path << " not found in cache. Loading...\n";
+        log_out(ss);
 
         fs::directory_entry full_path = fs::directory_entry(root_dir / relative_path);
         
         // load and store file if exists
         if (full_path.is_regular_file()) {
-            std::cout << "LOAD: " << full_path << std::endl;
-            chunk = this->load_from_file(full_path.path());
+            std::stringstream ss;
+            ss << "LOAD: " << full_path << std::endl;
+            log_out(ss);
+            
+            chunk = this->load_sfx_from_file(full_path.path());
             loaded_effects[relative_path] = chunk;
         }
 
@@ -91,28 +63,7 @@ Mix_Chunk* SFXManager::fetch_sfx(std::string path_segment) {
     return chunk;
 }
 
-// SDL_Texture* TextureManager::load_from_file(fs::path file_path) {
-//     SDL_Surface* surf = IMG_Load(file_path.string().c_str());
-//     SDL_Texture* tex = nullptr;
-
-//     if (surf == nullptr) {
-//         show_sdl_error("Could not load image");
-//         return nullptr;
-//     }
-    
-//     tex = SDL_CreateTextureFromSurface(renderer, surf);
-
-//     if (tex == nullptr) {
-//         show_sdl_error("Could not create texture");
-//         return nullptr;
-//     }  
-    
-//     SDL_FreeSurface(surf);
-
-//     return tex;
-// }
-
-Mix_Chunk* SFXManager::load_from_file(fs::path file_path) {
+Mix_Chunk* SFXManager::load_sfx_from_file(fs::path file_path) {
     Mix_Chunk* chunk = Mix_LoadWAV(file_path.string().c_str());
 
     if (chunk == nullptr) {
@@ -121,4 +72,47 @@ Mix_Chunk* SFXManager::load_from_file(fs::path file_path) {
     }
 
     return chunk;
+}
+
+Mix_Music* SFXManager::fetch_music(std::string path_segment) {
+    fs::path relative_path = {path_segment};
+    relative_path.make_preferred();    
+
+    Mix_Music* song = nullptr;
+    auto song_pair = loaded_songs.find(relative_path);
+
+    // sfx not cached
+    if (song_pair == loaded_songs.end()) {
+        std::stringstream ss;
+        ss << "Song " << relative_path << " not found in cache. Loading...\n";
+        log_out(ss);
+
+        fs::directory_entry full_path = fs::directory_entry(root_dir / relative_path);
+        
+        // load and store file if exists
+        if (full_path.is_regular_file()) {
+            std::stringstream ss;
+            ss << "LOAD: " << full_path << std::endl;
+            log_out(ss);
+            
+            song = this->load_music_from_file(full_path.path());
+            loaded_songs[relative_path] = song;
+        }
+
+    } else {
+        song = song_pair->second;
+    }
+
+    return song;
+}
+
+Mix_Music* SFXManager::load_music_from_file(fs::path file_path) {
+    Mix_Music* song = Mix_LoadMUS(file_path.string().c_str());
+
+    if (song == nullptr) {
+        show_sdl_error("Could not load song");
+        return nullptr;
+    }
+
+    return song;
 }

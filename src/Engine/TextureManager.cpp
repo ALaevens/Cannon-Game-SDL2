@@ -7,7 +7,9 @@ TextureManager::TextureManager(std::string root_dir_string, SDL_Renderer *render
     root_dir = root_dir_string;
     root_dir.make_preferred();
 
-    std::cout << "Texture Root: " << root_dir.string() << std::endl; 
+    std::stringstream ss;
+    ss << "Texture Root: " << root_dir.string() << std::endl;
+    log_out(ss);
 }
 
 TextureManager::~TextureManager() {
@@ -37,13 +39,17 @@ SDL_Texture* TextureManager::fetch(std::string path_segment) {
 
     // texture not cached
     if (tex_pair == loaded_textures.end()) {
-        std::cout << "Texture " << relative_path << " not found in cache. Loading...\n";
+        std::stringstream ss;
+        ss << "Texture " << relative_path << " not found in cache. Loading...\n";
+        log_out(ss);
 
         fs::directory_entry full_path = fs::directory_entry(root_dir / relative_path);
         
         // load and store file (if it exists)
         if (full_path.is_regular_file()) {
-            std::cout << "LOAD: " << full_path << std::endl;
+            std::stringstream ss;
+            ss << "LOAD: " << full_path << std::endl;
+            log_out(ss);
             tex = this->load_from_file(full_path.path());
             loaded_textures[relative_path] = tex;
         }

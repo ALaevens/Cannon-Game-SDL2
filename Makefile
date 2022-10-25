@@ -1,13 +1,14 @@
-GPP = x86_64-w64-mingw32-g++ -std=c++17 -O3
+GPP = x86_64-w64-mingw32-g++ -std=c++17 -O3 -mwindows
+# GPP = i686-w64-mingw32-g++ -std=c++17 -O3
 LIBRARY_ROOT = windowslibs/x64
 
-INCLUDE = -Iinclude -I$(LIBRARY_ROOT)/SDL2/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_image/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_mixer/include/SDL2
-LINK = -L$(LIBRARY_ROOT)/SDL2/lib -L$(LIBRARY_ROOT)/SDL2_image/lib -L$(LIBRARY_ROOT)/SDL2_mixer/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
+INCLUDE = -Iinclude -I$(LIBRARY_ROOT)/SDL2/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_image/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_mixer/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_ttf/include/SDL2
+LINK = -L$(LIBRARY_ROOT)/SDL2/lib -L$(LIBRARY_ROOT)/SDL2_image/lib -L$(LIBRARY_ROOT)/SDL2_mixer/lib -L$(LIBRARY_ROOT)/SDL2_ttf/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 
 all: out.exe
 
-out.exe: directories dlls main.o game.o Window.o Clock.o util.o TextureManager.o ECS.o
-	$(GPP) -static-libgcc -static-libstdc++ -o makebuild/final/out.exe makebuild/main.o makebuild/game.o makebuild/ECS.o makebuild/Window.o makebuild/Clock.o makebuild/util.o makebuild/TextureManager.o $(LINK)
+out.exe: directories dlls main.o game.o Window.o Clock.o util.o TextureManager.o ECS.o SFXManager.o FontManager.o
+	$(GPP) -static-libgcc -static-libstdc++ -o makebuild/final/out.exe makebuild/main.o makebuild/game.o makebuild/ECS.o makebuild/Window.o makebuild/Clock.o makebuild/util.o makebuild/TextureManager.o makebuild/SFXManager.o makebuild/FontManager.o $(LINK)
 	rsync -avh assets makebuild/final/ --delete
 	
 
@@ -32,6 +33,12 @@ util.o: src/Engine/util.cpp
 TextureManager.o: src/Engine/TextureManager.cpp
 	$(GPP) -o makebuild/TextureManager.o -c src/Engine/TextureManager.cpp $(INCLUDE)
 
+SFXManager.o: src/Engine/SFXManager.cpp
+	$(GPP) -o makebuild/SFXManager.o -c src/Engine/SFXManager.cpp $(INCLUDE)
+
+FontManager.o: src/Engine/FontManager.cpp
+	$(GPP) -o makebuild/FontManager.o -c src/Engine/FontManager.cpp $(INCLUDE)
+
 directories:
 	mkdir -p makebuild/final/
 
@@ -44,4 +51,5 @@ dlls:
 	cp $(LIBRARY_ROOT)/SDL2_image/bin/libpng16-16.dll makebuild/final/.
 	cp $(LIBRARY_ROOT)/SDL2_image/bin/zlib1.dll makebuild/final/.
 	cp $(LIBRARY_ROOT)/SDL2_mixer/bin/SDL2_mixer.dll makebuild/final/.
+	cp $(LIBRARY_ROOT)/SDL2_ttf/bin/SDL2_ttf.dll makebuild/final/.
 

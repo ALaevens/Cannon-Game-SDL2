@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <utility>
+#include <string>
+#include <iostream>
 
 template <typename T>
 struct Vector2 {
@@ -16,17 +18,17 @@ struct Vector2 {
         y = magnitude * sin(radians);
     }
 
-    float* toMagAngle() {
-        float response[2];
+    std::pair<float, float> toMagAngle() {
+        std::pair<float, float> res;
 
-        response[0] = sqrt(pow(x, 2) + pow(y, 2));
+        res.first = sqrt(pow(x, 2) + pow(y, 2));
 
         if (x == 0 && y == 0)
-            response[1] = 0;
+            res.second = 0;
         else
-            response[1] = atan2(y, x);
+            res.second = atan2(y, x);
         
-        return response;
+        return res;
     }
 
     Vector2 operator + (Vector2 const &obj) {
@@ -71,4 +73,9 @@ struct Vector2 {
         return res;
     }
 
+    std::string str() {
+        std::stringstream ss;
+        ss << "X: " << x << ", Y: " << y;
+        return ss.str();
+    }
 };

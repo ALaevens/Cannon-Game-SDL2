@@ -46,4 +46,28 @@ struct CDestRect : Component {
         Vector2<int> res{(rect.x + rect.w) / 2, (rect.y + rect.h) / 2};
         return res;
     }
+
+    Vector2<int> getAnchorPos(int flags) {
+        Vector2<int> res;
+
+        if (anchorFlag & LEFT)
+            res.x = rect.x;
+        else if (anchorFlag & RIGHT)
+            res.x =  rect.x + rect.w;
+        else if (anchorFlag & CENTER_X)
+            res.x = rect.x + (rect.w / 2);
+
+        if (anchorFlag & TOP)
+            res.y = rect.y;
+        else if (anchorFlag & BOTTOM)
+            res.y = rect.y + rect.h;
+        else if (anchorFlag & CENTER_Y)
+            res.y = rect.y + (rect.h / 2);
+
+        return res;
+    }
+
+    Vector2<int> getAnchorPos() {
+        return getAnchorPos(anchorFlag);
+    }
 };
