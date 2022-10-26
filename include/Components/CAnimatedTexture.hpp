@@ -18,7 +18,7 @@ struct CAnimatedTexture : Component {
     int plays;
     double timer;
 
-    CAnimatedTexture(SDL_Texture *p_tex, int p_frames, int p_fps, float p_scale) : tex(p_tex), scale(p_scale), frames(p_frames), fps(p_fps), currentFrame(0), plays(0) {}
+    CAnimatedTexture(SDL_Texture *p_tex, int p_frames, int p_fps, float p_scale) : tex(p_tex), scale(p_scale), frames(p_frames), currentFrame(0), fps(p_fps), plays(0) {}
 
     void init() override {
         cDest = &entity->getComponent<CDestRect>();

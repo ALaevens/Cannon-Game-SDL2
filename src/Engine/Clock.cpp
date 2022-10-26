@@ -26,7 +26,7 @@ double Clock::tick() {
         SDL_Delay(diff);
 
         double now = SDL_GetPerformanceCounter();
-        double duration = (double)((now - last)*1000) / tps; 
+        duration = (double)((now - last)*1000) / tps; 
     }
 
     current = now;

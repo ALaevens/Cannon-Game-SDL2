@@ -186,7 +186,6 @@ void Game::createBackground() {
         entity.addComponent<CKinematics>(Vector2<float>{0, 0}, Vector2<float>{(float)(rand() % 40 + 10), 0});
         entity.addComponent<CCloudController>();
         entity.addComponent<CStaticTexture>(texManager->fetch("static/cloud" + std::to_string(rand() % 3) + ".png"), (rand() % 6)/2 + 8);
-        // entity.addComponent<CStaticTexture>(texManager->fetch("static/cloud2.png"), 8);
         entity.addGroup(EntityGroup::RLBackground);
     }
 }

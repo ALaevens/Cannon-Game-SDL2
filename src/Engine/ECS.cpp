@@ -92,7 +92,7 @@ std::vector<Entity*>& Manager::getEntitiesByGroup(Group p_group) {
 }
 
 void Manager::refresh() {
-    for (int i = 0; i < maxGroups; ++i) {
+    for (Group i = 0; i < maxGroups; ++i) {
         auto& v = groupedEntities[i];
         v.erase(
             std::remove_if(
