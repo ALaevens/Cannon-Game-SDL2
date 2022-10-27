@@ -1,3 +1,6 @@
 build/
 makebuild/
+winobj/
 .vscode/c_cpp_properties.json
+
+*.res

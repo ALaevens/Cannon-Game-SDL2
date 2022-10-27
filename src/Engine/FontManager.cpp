@@ -101,7 +101,16 @@ void FontTexture::generate(std::string text, TextStyle style) {
 }
 
 void FontTexture::render(int x, int y) {
-    dest.x = x; dest.y = y;
+    render(x, y, false);
+}
+
+void FontTexture::render(int x, int y, bool center) {
+    if (center) {
+        dest.x = x - dest.w/2;
+        dest.y = y - dest.h/2;
+    } else {
+        dest.x = x; dest.y = y;
+    }
 
     SDL_RenderCopy(renderer, tex, nullptr, &dest); 
 }

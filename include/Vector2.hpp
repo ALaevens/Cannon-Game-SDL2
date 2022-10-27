@@ -4,6 +4,7 @@
 #include <utility>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 template <typename T>
 struct Vector2 {

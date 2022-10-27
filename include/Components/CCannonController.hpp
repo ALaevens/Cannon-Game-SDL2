@@ -2,14 +2,16 @@
 #include "../Engine/ECS.hpp"
 #include "Vector2.hpp"
 #include "../Engine/Keyboard.hpp"
-#include "game.hpp"
 #include "consts.hpp"
 #include <algorithm>
 #include <cstdlib>
 
-using namespace ECS;
+#include "Components/CMeterController.hpp"
+#include "Components/CAnimatedTexture.hpp"
+#include "Components/CRotation.hpp"
+#include "Components/CSFXEmitter.hpp"
 
-class Game;
+using namespace ECS;
 
 struct CCannonController : Component {
     Keyboard* keyboard;

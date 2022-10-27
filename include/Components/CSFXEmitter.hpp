@@ -1,6 +1,7 @@
 #pragma once
 #include "../Engine/ECS.hpp"
 #include <vector>
+#include <SDL_mixer.h>
 
 using namespace ECS;
 

@@ -57,6 +57,7 @@ public:
     ~FontTexture();
     void generate(std::string text, TextStyle style);
     void render(int x, int y);
+    void render(int x, int y, bool center);
 
     bool isGenerated() { return tex != nullptr; }
 

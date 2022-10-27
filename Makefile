@@ -1,55 +1,45 @@
-GPP = x86_64-w64-mingw32-g++ -std=c++17 -O3 -mwindows
-# GPP = i686-w64-mingw32-g++ -std=c++17 -O3
-LIBRARY_ROOT = windowslibs/x64
+CC := x86_64-w64-mingw32-g++ -std=c++17 -O3 -mwindows
+LIBRARY_ROOT := windowslibs/x64
+LIBRARIES := -L$(LIBRARY_ROOT)/SDL2/lib -L$(LIBRARY_ROOT)/SDL2_image/lib -L$(LIBRARY_ROOT)/SDL2_mixer/lib -L$(LIBRARY_ROOT)/SDL2_ttf/lib -L$(LIBRARY_ROOT)/SDL2_gfx/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx
 
-INCLUDE = -Iinclude -I$(LIBRARY_ROOT)/SDL2/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_image/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_mixer/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_ttf/include/SDL2
-LINK = -L$(LIBRARY_ROOT)/SDL2/lib -L$(LIBRARY_ROOT)/SDL2_image/lib -L$(LIBRARY_ROOT)/SDL2_mixer/lib -L$(LIBRARY_ROOT)/SDL2_ttf/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+INCLUDE := -Iinclude -I$(LIBRARY_ROOT)/SDL2/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_image/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_mixer/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_ttf/include/SDL2 -I$(LIBRARY_ROOT)/SDL2_gfx/include/SDL2
+CFLAGS := -std=c++17 -O3 -mwindows
+LFLAGS := -static-libgcc -static-libstdc++
 
-all: out.exe
+TARGET := makebuild/cannon.exe
 
-out.exe: directories dlls main.o game.o Window.o Clock.o util.o TextureManager.o ECS.o SFXManager.o FontManager.o
-	$(GPP) -static-libgcc -static-libstdc++ -o makebuild/final/out.exe makebuild/main.o makebuild/game.o makebuild/ECS.o makebuild/Window.o makebuild/Clock.o makebuild/util.o makebuild/TextureManager.o makebuild/SFXManager.o makebuild/FontManager.o $(LINK)
-	rsync -avh assets makebuild/final/ --delete
-	
+SRCS := $(wildcard src/*.cpp src/Engine/*.cpp src/Scenes/*.cpp)
+OBJS := $(addprefix winobj/,$(subst src/, ,$(patsubst %.cpp,%.o,$(SRCS)))) # produces winobj/main.o winobj/Engine/Game.o etc
 
-main.o: src/main.cpp
-	$(GPP) -o makebuild/main.o -c src/main.cpp $(INCLUDE)
+all: directories dlls $(TARGET)
 
-ECS.o: src/Engine/ECS.cpp
-	$(GPP) -o makebuild/ECS.o -c src/Engine/ECS.cpp $(INCLUDE)
+$(TARGET): $(OBJS) cannon.res
+	$(CC) $(LFLAGS) -o $@ $^ $(LIBRARIES)
+	rsync -avh assets makebuild/ --delete
 
-game.o: src/game.cpp
-	$(GPP) -o makebuild/game.o -c src/game.cpp $(INCLUDE)
+cannon.res:
+	x86_64-w64-mingw32-windres cannon.rc -O coff -o cannon.res
 
-Window.o: src/Engine/Window.cpp
-	$(GPP) -o makebuild/Window.o -c src/Engine/Window.cpp $(INCLUDE)
+winobj/%.o: src/%.cpp
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
 
-Clock.o: src/Engine/Clock.cpp
-	$(GPP) -o makebuild/Clock.o -c src/Engine/Clock.cpp $(INCLUDE)
-
-util.o: src/Engine/util.cpp
-	$(GPP) -o makebuild/util.o -c src/Engine/util.cpp $(INCLUDE)
-
-TextureManager.o: src/Engine/TextureManager.cpp
-	$(GPP) -o makebuild/TextureManager.o -c src/Engine/TextureManager.cpp $(INCLUDE)
-
-SFXManager.o: src/Engine/SFXManager.cpp
-	$(GPP) -o makebuild/SFXManager.o -c src/Engine/SFXManager.cpp $(INCLUDE)
-
-FontManager.o: src/Engine/FontManager.cpp
-	$(GPP) -o makebuild/FontManager.o -c src/Engine/FontManager.cpp $(INCLUDE)
-
-directories:
-	mkdir -p makebuild/final/
 
 clean:
-	rm makebuild/*.o
+	rm -rf makebuild/
+	rm -rf winobj/
+
+directories:
+	mkdir -p makebuild/
+	mkdir -p winobj/Engine
+	mkdir -p winobj/Scenes
 
 dlls:
-	cp $(LIBRARY_ROOT)/SDL2/bin/SDL2.dll makebuild/final/.
-	cp $(LIBRARY_ROOT)/SDL2_image/bin/SDL2_image.dll makebuild/final/.
-	cp $(LIBRARY_ROOT)/SDL2_image/bin/libpng16-16.dll makebuild/final/.
-	cp $(LIBRARY_ROOT)/SDL2_image/bin/zlib1.dll makebuild/final/.
-	cp $(LIBRARY_ROOT)/SDL2_mixer/bin/SDL2_mixer.dll makebuild/final/.
-	cp $(LIBRARY_ROOT)/SDL2_ttf/bin/SDL2_ttf.dll makebuild/final/.
+	cp $(LIBRARY_ROOT)/SDL2/bin/SDL2.dll makebuild/.
+	cp $(LIBRARY_ROOT)/SDL2_image/bin/SDL2_image.dll makebuild/.
+	cp $(LIBRARY_ROOT)/SDL2_image/bin/libpng16-16.dll makebuild/.
+	cp $(LIBRARY_ROOT)/SDL2_image/bin/zlib1.dll makebuild/.
+	cp $(LIBRARY_ROOT)/SDL2_mixer/bin/SDL2_mixer.dll makebuild/.
+	cp $(LIBRARY_ROOT)/SDL2_ttf/bin/SDL2_ttf.dll makebuild/.
+	cp $(LIBRARY_ROOT)/SDL2_gfx/bin/libSDL2_gfx-1-0-0.dll makebuild/.
 
+.PHONY: all clean directories dlls

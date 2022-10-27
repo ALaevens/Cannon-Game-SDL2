@@ -8,6 +8,7 @@
 #include "Engine/Keyboard.hpp"
 #include "Engine/SFXManager.hpp"
 #include "Engine/FontManager.hpp"
+#include "Engine/Scene.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>

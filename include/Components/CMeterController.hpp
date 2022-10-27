@@ -7,7 +7,7 @@
 
 using namespace ECS;
 
-class Game;
+class old_Game;
 
 struct CMeterController : Component {
     Entity& slider;

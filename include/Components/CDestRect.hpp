@@ -17,6 +17,14 @@ struct CDestRect : Component {
     SDL_Rect rect = {0, 0, 1, 1};
     int anchorFlag;
     
+    CDestRect(int x, int y, int w, int h, int p_anchorFlag) {
+        anchorFlag = p_anchorFlag;
+        rect.w = w;
+        rect.h = h;
+
+        setPos(x, y);
+    }
+
     CDestRect(int p_anchorFlag) : anchorFlag(p_anchorFlag) {}
     CDestRect() : CDestRect(TOP | LEFT) {}
 

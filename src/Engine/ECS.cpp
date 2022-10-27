@@ -124,3 +124,11 @@ Entity& Manager::addEntity() {
     entities.emplace_back(std::move(uPtr));
     return *e;
 }
+
+void Manager::empty() {
+    for (auto& e : entities) {
+        e->destroy();
+    }
+
+    refresh();
+}

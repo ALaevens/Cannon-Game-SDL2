@@ -123,6 +123,8 @@ namespace ECS
 
         void refresh();
 
+        void empty();
+
         Entity& addEntity();
 
     private:
