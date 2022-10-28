@@ -7,10 +7,16 @@
 #include <map>
 #include <set>
 #include <string>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 
 int main(int argc, char **argv) {
-    // log_out << "Path: " << argv[0] << "\n";
+
+    fs::path binary = argv[0];
+    binary.make_preferred().remove_filename();
+    fs::current_path(binary);
 
     if (!init()) {
         return -1;

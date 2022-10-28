@@ -45,4 +45,13 @@ add_custom_target(copy_assets
 )
 add_dependencies(${PROJECT_NAME} copy_assets)
 
+install(
+    TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/assets/
+    DESTINATION bin/assets    
+)
 
