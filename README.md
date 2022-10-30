@@ -46,5 +46,6 @@ $ ./cannon
 ### Building for Windows
 ```
 # The makefile in the root directory will take care of it
+# Copy the contents of the generated "makebuild" folder to a windows PC and run cannon.exe
 $ make
 ```
