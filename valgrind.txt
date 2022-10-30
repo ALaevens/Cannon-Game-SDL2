@@ -1,5 +1,0 @@
-Enter scene [menu]
-Enter scene [cannon]
-Enter scene [menu]
-Enter scene [controls]
-Enter scene [menu]
