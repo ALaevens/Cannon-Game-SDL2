@@ -43,7 +43,7 @@ $ make
 $ ./cannon
 ```
 
-### Building for Windows
+### Building for Windows (From Ubuntu)
 ```
 # The makefile in the root directory will take care of it
 # Copy the contents of the generated "makebuild" folder to a windows PC and run cannon.exe
